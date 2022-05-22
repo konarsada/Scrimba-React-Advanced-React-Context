@@ -1,28 +1,19 @@
-import React, {Component} from "react"
+import React, {useState, createContext} from "react"
 
-const {Provider, Consumer} = React.createContext()
+const ThemeContext = createContext()
 
-class ThemeContextProvider extends Component {
-    state = {
-        theme: "dark"
+function ThemeContextProvider(props) {
+    const [theme, setTheme] = useState("dark")
+    
+    function toggleTheme() {
+        setTheme(prevTheme => prevTheme === "light" ? "dark" : "light")
     }
-
-    toggleTheme = () => {
-        this.setState(prevState => ({
-            theme: prevState.theme === "dark" ? "light" : "dark"
-        }))
-    }
-
-    render() {
-        return (
-            <Provider value={{
-                theme: this.state.theme,
-                toggleTheme: this.toggleTheme
-            }}>
-                {this.props.children}
-            </Provider>
-        )
-    }
+    
+    return (
+        <ThemeContext.Provider value={{theme, toggleTheme}}>
+            {props.children}
+        </ThemeContext.Provider>
+    )
 }
 
-export {ThemeContextProvider, Consumer as ThemeContextConsumer}
+export {ThemeContextProvider, ThemeContext}
